@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Auto-starts Finance Tracker backend and frontend servers on login and after hibernate/sleep resume.</Description>
+    <Author>nkanala@apollo.com</Author>
+  </RegistrationInfo>
+  <Triggers>
+    <!-- Trigger 1: On user logon -->
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+      <UserId>APOLLO\nkanala</UserId>
+      <Delay>PT15S</Delay>
+    </LogonTrigger>
+    <!-- Trigger 2: On resume from sleep / hibernate -->
+    <EventTrigger>
+      <Enabled>true</Enabled>
+      <Delay>PT10S</Delay>
+      <Subscription>&lt;QueryList&gt;&lt;Query Id="0" Path="System"&gt;&lt;Select Path="System"&gt;*[System[Provider[@Name='Microsoft-Windows-Power-Troubleshooter'] and EventID=1]]&lt;/Select&gt;&lt;/Query&gt;&lt;/QueryList&gt;</Subscription>
+    </EventTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <UserId>APOLLO\nkanala</UserId>
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <DisallowStartOnRemoteAppSession>false</DisallowStartOnRemoteAppSession>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+    <WakeToRun>false</WakeToRun>
+    <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
+    <Priority>7</Priority>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>C:\Users\nkanala\OneDrive - Apollo Management L.P\Documents\Claude_All_Asset_tracking\finance-tracker\start-servers.bat</Command>
+      <WorkingDirectory>C:\Users\nkanala\OneDrive - Apollo Management L.P\Documents\Claude_All_Asset_tracking\finance-tracker</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

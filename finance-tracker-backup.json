@@ -1,0 +1,166 @@
+{
+  "savedAt": "2026-10-02T14:36:28.180Z",
+  "data": {
+    "ft_users": [
+      {
+        "username": "Narendra",
+        "password": "Naren@cap1",
+        "passwordHint": "Cap1"
+      },
+      {
+        "username": "NarenTest1",
+        "password": "Naren@cap1",
+        "passwordHint": "Cap1"
+      },
+      {
+        "username": "nkanala1",
+        "password": "Naren@cap1",
+        "passwordHint": "cap1"
+      }
+    ],
+    "ft_current_user": "nkanala1",
+    "ft_transactions_nkanala1": [
+      {
+        "id": "1790950585977",
+        "symbol": "APO",
+        "quantity": 10,
+        "price": 130,
+        "fees": 0,
+        "type": "buy",
+        "currency": "USD",
+        "dematAccount": "Narendra",
+        "date": "2026-10-02T14:16:25.977Z"
+      },
+      {
+        "id": "1790950600611",
+        "symbol": "GOOGL",
+        "quantity": 20,
+        "price": 300,
+        "fees": 0,
+        "type": "buy",
+        "currency": "USD",
+        "dematAccount": "Narendra",
+        "date": "2026-10-02T14:16:40.611Z"
+      },
+      {
+        "id": "1790950621598",
+        "symbol": "AAPL",
+        "quantity": 10,
+        "price": 150,
+        "fees": 0,
+        "type": "buy",
+        "currency": "USD",
+        "dematAccount": "Rohini",
+        "date": "2026-10-02T14:17:01.598Z"
+      },
+      {
+        "id": "1790950665784",
+        "symbol": "RELIANCE.NS",
+        "quantity": 10,
+        "price": 1200,
+        "fees": 0,
+        "type": "buy",
+        "currency": "INR",
+        "dematAccount": "Narendra",
+        "date": "2026-10-02T14:17:45.784Z"
+      },
+      {
+        "id": "1790950685953",
+        "symbol": "INFY",
+        "quantity": 10,
+        "price": 1500,
+        "fees": 0,
+        "type": "buy",
+        "currency": "INR",
+        "dematAccount": "Rohini",
+        "date": "2026-10-02T14:18:05.953Z"
+      },
+      {
+        "id": "1790951605483",
+        "symbol": "META",
+        "quantity": 10,
+        "price": 750,
+        "fees": 0,
+        "type": "buy",
+        "currency": "USD",
+        "dematAccount": "Rohini",
+        "date": "2026-10-02T14:33:25.483Z"
+      }
+    ],
+    "ft_cash_usd_nkanala1": {
+      "Narendra": 0,
+      "Rohini": 0
+    },
+    "ft_cash_inr_nkanala1": {
+      "Narendra": 0,
+      "Rohini": 0
+    },
+    "ft_investments_nkanala1": [
+      {
+        "id": "1790951261763",
+        "name": "SBI FD",
+        "amountInvested": 20000,
+        "currency": "INR",
+        "dateOfInvestment": "2026-01-01",
+        "interestPercent": 7
+      }
+    ],
+    "ft_monthly_expenses_nkanala1": {
+      "2026-10": [
+        {
+          "type": "Credit Card",
+          "note": "HDFC Credit cared",
+          "amount": 25000,
+          "currency": "INR",
+          "status": "Unpaid",
+          "paidDate": null,
+          "dueDate": null,
+          "recurrence": null,
+          "id": "aeb12793-5a40-4ed5-81e6-546f03d2f94f"
+        }
+      ],
+      "2026-11": [
+        {
+          "type": "Credit Card",
+          "note": "HDFC Credit cared",
+          "amount": 30000,
+          "currency": "INR",
+          "status": "Unpaid",
+          "paidDate": null,
+          "dueDate": null,
+          "recurrence": null,
+          "id": "fa688d50-9667-43ed-9b5a-72a66b5bbfa7"
+        }
+      ]
+    },
+    "ft_fire_nkanala1": {
+      "monthlyExpenses": 100000,
+      "currentAge": 35,
+      "targetFIREAge": 45,
+      "lifeExpectancy": 85,
+      "inflation": 7
+    },
+    "ft_app_config_nkanala1": {
+      "dematAccounts": [
+        "Narendra",
+        "Rohini",
+        "Dad"
+      ],
+      "enabledTabs": {
+        "equity": true,
+        "transactions": true,
+        "allocation": true,
+        "india-equity": true,
+        "india-transactions": true,
+        "india-allocation": true,
+        "india-mf": true,
+        "loans": true,
+        "realestate": true,
+        "additional": true,
+        "fire": true,
+        "expenses": true,
+        "expense-report": true
+      }
+    }
+  }
+}
