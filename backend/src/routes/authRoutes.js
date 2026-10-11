@@ -12,5 +12,6 @@ router.post('/register',       credentialLimiter, asyncHandler(authController.re
 router.post('/login',          credentialLimiter, asyncHandler(authController.login));
 router.post('/reset-password', credentialLimiter, asyncHandler(authController.resetPassword));
 router.get('/me',              authenticate,      authController.me);
+router.delete('/me',           credentialLimiter, authenticate, asyncHandler(authController.deleteAccount));
 
 module.exports = router;

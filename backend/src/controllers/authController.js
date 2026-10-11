@@ -21,4 +21,10 @@ async function resetPassword(req, res) {
   res.json({ ok: true });
 }
 
-module.exports = { register, login, me, resetPassword };
+// DELETE /api/auth/me — body: { password }. Permanently deletes the account and its data.
+async function deleteAccount(req, res) {
+  await authService.deleteAccount(req.user, req.body?.password);
+  res.json({ ok: true });
+}
+
+module.exports = { register, login, me, resetPassword, deleteAccount };

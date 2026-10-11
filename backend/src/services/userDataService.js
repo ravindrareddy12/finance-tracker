@@ -19,13 +19,15 @@ async function save(user, data) {
   return { savedAt: updatedAt.toISOString(), keys: ops.length };
 }
 
-// All of the user's keys merged into one object, plus the most recent save time.
+// All of the user's keys merged into one object, the most recent save time, and per-key versions.
 async function load(user) {
   const docs = await UserData.find({ user: user._id }).lean();
-  if (!docs.length) return { data: null, savedAt: null };
-  const data    = Object.fromEntries(docs.map(d => [d.key, d.value]));
-  const savedAt = new Date(Math.max(...docs.map(d => d.updatedAt))).toISOString();
-  return { savedAt, data };
+  if (!docs.length) return { data: null, savedAt: null, versions: {} };
+  const data     = Object.fromEntries(docs.map(d => [d.key, d.value]));
+  // Per-key last-modified times, so clients can tell which keys another device changed
+  const versions = Object.fromEntries(docs.map(d => [d.key, new Date(d.updatedAt).toISOString()]));
+  const savedAt  = new Date(Math.max(...docs.map(d => d.updatedAt))).toISOString();
+  return { savedAt, data, versions };
 }
 
 module.exports = { save, load };

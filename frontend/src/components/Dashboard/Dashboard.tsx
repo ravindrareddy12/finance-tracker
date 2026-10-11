@@ -15,8 +15,7 @@ import MonthlyExpenseReport from './MonthlyExpenseReport';
 import ConfigurationPage from './ConfigurationPage';
 import { TrendingUp, LogOut, HandCoins, Building2, Landmark, LayoutDashboard, BarChart3, Flame, Receipt, FileBarChart, Settings, Download, DatabaseBackup, UploadCloud, CheckCircle, AlertCircle, Menu, X } from 'lucide-react';
 import { exportAllToExcel } from '../../utils/exportToExcel';
-import { useAutoBackup, collectUserData, restoreUserData } from '../../hooks/useAutoBackup';
-import axios from 'axios';
+import { useAutoBackup, loadFromServer, pushChanges } from '../../hooks/useAutoBackup';
 
 type Tab = 'dashboard' | 'equity' | 'transactions' | 'allocation' | 'india-equity' | 'india-transactions' | 'india-allocation' | 'india-mf' | 'loans' | 'realestate' | 'additional' | 'fire' | 'expenses' | 'expense-report' | 'config';
 
@@ -70,7 +69,7 @@ function DashboardContent() {
     showStatus('saving', 'Saving backup…', 0);
     try {
       if (!currentUser) return;
-      await axios.post('/api/backup', { data: collectUserData(currentUser) });
+      await pushChanges(currentUser, { all: true });
       showStatus('ok', `Backup saved (${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })})`);
     } catch {
       showStatus('error', 'Backup failed');
@@ -81,10 +80,10 @@ function DashboardContent() {
     if (!window.confirm('This will overwrite your current data with the last backup. Continue?')) return;
     showStatus('restoring', 'Restoring…', 0);
     try {
-      const r = await axios.get('/api/backup');
-      if (!r.data?.data) { showStatus('error', 'No backup found'); return; }
-      if (currentUser) restoreUserData(currentUser, r.data.data as Record<string, unknown>);
-      showStatus('ok', `Restored from ${new Date(r.data.savedAt).toLocaleString('en-IN')}`);
+      if (!currentUser) return;
+      const savedAt = await loadFromServer(currentUser);
+      if (!savedAt) { showStatus('error', 'No backup found'); return; }
+      showStatus('ok', `Restored from ${new Date(savedAt).toLocaleString('en-IN')}`);
       setTimeout(() => window.location.reload(), 1200);
     } catch {
       showStatus('error', 'Restore failed');

@@ -7,7 +7,7 @@ function getHealth(req, res) {
     status:        'ok',
     database:      isDBConnected() ? 'connected' : 'disconnected',
     cachedSymbols: quoteService.getCacheSize(),
-    engine:        'powershell-schannel',
+    engine:        quoteService.ENGINE,
   });
 }
 

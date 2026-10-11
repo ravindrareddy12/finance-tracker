@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { AUTH_EXPIRED_EVENT, tokenStore } from '../services/api';
-import { clearUserData, collectUserData, purgeLegacyAuthKeys, restoreUserData } from '../hooks/useAutoBackup';
+import { clearUserData, loadFromServer, purgeLegacyAuthKeys, pushChanges } from '../hooks/useAutoBackup';
 
 // 'checking' while a stored token is being validated with the server
 export type AuthStatus = 'checking' | 'authenticated' | 'anonymous';
@@ -17,6 +17,8 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   signup: (username: string, password: string, passwordHint?: string) => Promise<void>;
   logout: () => Promise<void>;
+  /** End the session without syncing (e.g. after the account was deleted) */
+  signOutLocal: () => void;
   resetPassword: (username: string, passwordHint: string, newPassword: string) => Promise<void>;
 }
 
@@ -37,7 +39,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     purgeLegacyAuthKeys();
     if (!tokenStore.get()) return;
     axios.get<{ user: { username: string } }>('/api/auth/me')
-      .then(r => { setCurrentUser(r.data.user.username); setStatus('authenticated'); })
+      .then(async r => {
+        const username = r.data.user.username;
+        // The server copy is authoritative: other devices may have changed it
+        try { await loadFromServer(username); } catch { /* offline — use the local copy */ }
+        setCurrentUser(username);
+        setStatus('authenticated');
+      })
       .catch(err => {
         if (err.response?.status === 401) tokenStore.clear();
         setCurrentUser(null);
@@ -54,10 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Store the token and load the user's saved data into this browser
   const startSession = async ({ token, user }: SessionResponse) => {
     tokenStore.set(token);
-    try {
-      const r = await axios.get('/api/backup');
-      if (r.data?.data) restoreUserData(user.username, r.data.data as Record<string, unknown>);
-    } catch { /* keep whatever is cached locally */ }
+    try { await loadFromServer(user.username); } catch { /* keep whatever is cached locally */ }
     setCurrentUser(user.username);
     setStatus('authenticated');
   };
@@ -75,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Save one last backup, then remove the user's data from this browser
   const logout = async () => {
     if (currentUser) {
-      try { await axios.post('/api/backup', { data: collectUserData(currentUser) }); } catch { /* best-effort */ }
+      try { await pushChanges(currentUser); } catch { /* best-effort */ }
       clearUserData(currentUser);
     }
     endSession();
@@ -86,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, status, login, signup, logout, resetPassword }}>
+    <AuthContext.Provider value={{ currentUser, status, login, signup, logout, signOutLocal: endSession, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,7 +10,7 @@ async function saveBackup(req, res) {
   res.json({ ok: true, ...result });
 }
 
-// GET /api/backup — returns { savedAt, data } for the signed-in user
+// GET /api/backup — returns { savedAt, data, versions } for the signed-in user
 async function getBackup(req, res) {
   res.json(await userDataService.load(req.user));
 }

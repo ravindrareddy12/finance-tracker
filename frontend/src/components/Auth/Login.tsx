@@ -240,6 +240,9 @@ export default function Login() {
           Don't have an account?{' '}
           <Link to="/signup" className="text-blue-600 hover:underline font-medium">Sign up</Link>
         </p>
+        <p className="text-center text-xs text-gray-400 mt-3">
+          <Link to="/privacy-policy" className="hover:text-gray-600 hover:underline">Privacy Policy</Link>
+        </p>
       </div>
     </div>
   );

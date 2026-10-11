@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const User     = require('../models/User');
+const UserData = require('../models/UserData');
 const ApiError = require('../utils/ApiError');
 const { signToken } = require('./tokenService');
 
@@ -47,4 +49,17 @@ async function resetPassword({ username, passwordHint, newPassword }) {
   await user.save();
 }
 
-module.exports = { register, login, resetPassword };
+// Permanently delete the account and everything stored for it. The password is
+// re-checked so a stolen session token alone can't delete an account.
+async function deleteAccount(user, password) {
+  if (!(await user.comparePassword(String(password ?? '')))) {
+    throw ApiError.unauthorized('Password is incorrect.');
+  }
+  await UserData.deleteMany({ user: user._id });
+  // Pre-migration copies of this user's data, if any are left
+  const legacy = mongoose.connection.db.collection('backups_legacy');
+  await legacy.deleteMany({ _id: { $regex: `^ft_.*_${user.username.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$` } });
+  await User.deleteOne({ _id: user._id });
+}
+
+module.exports = { register, login, resetPassword, deleteAccount };
