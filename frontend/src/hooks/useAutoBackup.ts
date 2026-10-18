@@ -163,7 +163,9 @@ export function useAutoBackup(user: string | null) {
     document.addEventListener('visibilitychange', syncOnReturn);
     window.addEventListener('focus', syncOnReturn);
     window.addEventListener('pagehide', flushOnUnload);
-    const interval = setInterval(triggerBackup, 30_000);
+    // Same-tab localStorage writes don't fire 'storage', so check for unsynced
+    // edits often — the Android app reads the server copy.
+    const interval = setInterval(triggerBackup, 5_000);
     triggerBackup();
     return () => {
       window.removeEventListener('storage', triggerBackup);

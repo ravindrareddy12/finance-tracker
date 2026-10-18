@@ -149,7 +149,8 @@ export default function MutualFundTracker() {
           dates.forEach(d => allDatesByCode[schedule.schemeCode].add(d));
         });
 
-        // Fetch NAVs for each scheme
+        // Fetch NAVs for each scheme, keyed by the requested ISO date (navDate is
+        // the AMFI date actually used, DD-Mon-YYYY, which may be an earlier day)
         const navResults: Record<string, Record<string, number>> = {};
         await Promise.all(Object.entries(allDatesByCode).map(async ([code, datesSet]) => {
           try {
@@ -157,10 +158,10 @@ export default function MutualFundTracker() {
               params: { code, dates: [...datesSet].join(',') },
             });
             navResults[code] = {};
-            (r.data?.results ?? []).forEach((item: { navDate: string; nav: number }) => {
-              navResults[code][item.navDate] = item.nav;
+            (r.data?.results ?? []).forEach((item: { requestedDate: string; nav: number | null }) => {
+              if (item.nav != null) navResults[code][item.requestedDate] = item.nav;
             });
-          } catch { /* skip if unavailable */ }
+          } catch { /* unavailable — the schedule is retried next time */ }
         }));
 
         // Build new transactions and advance schedules
@@ -168,15 +169,19 @@ export default function MutualFundTracker() {
         const updatedSchedules = sipSchedules.map(s => ({ ...s }));
 
         toProcess.forEach(({ schedule, dates }) => {
-          const codeNavs = navResults[schedule.schemeCode] ?? {};
+          const codeNavs = navResults[schedule.schemeCode];
+          if (!codeNavs) return; // NAV fetch failed — leave the schedule for next time
+          // The Android app may already have recorded some of these instalments
+          const existing = new Set(updatedHoldings.find(h => h.id === schedule.fundId)?.transactions.map(t => t.id) ?? []);
           const newTxs: MFTransaction[] = [];
 
           dates.forEach(date => {
             const nav = codeNavs[date];
-            if (!nav) return; // skip if no NAV available for this date
+            const id = `sip_auto_${schedule.id}_${date}`;
+            if (!nav || existing.has(id)) return; // skip if no NAV for this date, or already added
             const units = parseFloat((schedule.amount / nav).toFixed(3));
             newTxs.push({
-              id:     `sip_auto_${schedule.id}_${date}`,
+              id,
               type:   'buy',
               date,
               units,
