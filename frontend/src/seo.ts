@@ -5,8 +5,7 @@ export const SITE = {
   name: 'Finance Tracker',
   url: 'https://finance.mypgmanager.com',
   ogImage: 'https://finance.mypgmanager.com/og-image.png',
-  // Set this once the Android app is live on Google Play to show the store link
-  playStoreUrl: '',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.mypgmanager.finance',
 };
 
 export interface PageMeta {
@@ -88,6 +87,10 @@ export const FAQ: FaqItem[] = [
   {
     q: 'Is my data private?',
     a: 'Your data is tied to your account and is not sold, shared or used for advertising. Passwords are stored only as bcrypt hashes and the site has no ad or analytics trackers.',
+  },
+  {
+    q: 'Is there a mobile app?',
+    a: 'Yes. Finance Tracker is available on Google Play for Android. Sign in with the same account and your data stays in sync with the website.',
   },
   {
     q: 'Can I export my data?',

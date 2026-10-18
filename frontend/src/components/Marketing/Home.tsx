@@ -84,9 +84,15 @@ export default function Home() {
               </Link>
             </div>
             <ul className="mt-8 grid sm:grid-cols-2 gap-2 text-sm text-blue-100/90">
-              {['NYSE, NASDAQ & NSE live prices', 'Mutual fund XIRR & SIPs', 'Excel import & export', 'Web + Android app'].map(t => (
+              {['NYSE, NASDAQ & NSE live prices', 'Mutual fund XIRR & SIPs', 'Excel import & export'].map(t => (
                 <li key={t} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-300" />{t}</li>
               ))}
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                <a href={SITE.playStoreUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+                  Web + Android app
+                </a>
+              </li>
             </ul>
           </div>
           <DashboardPreview />
@@ -171,7 +177,7 @@ export default function Home() {
             <span className="shrink-0 inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 text-white"><Smartphone className="w-6 h-6" /></span>
             <div>
               <h2 className="text-xl font-bold">Take it with you on Android</h2>
-              <p className="mt-1 text-gray-600">Sign in on the Android app with the same account — your data stays in sync with the website.</p>
+              <p className="mt-1 text-gray-600">Download Finance Tracker from Google Play and sign in with the same account — your data stays in sync with the website.</p>
             </div>
           </div>
           {SITE.playStoreUrl && (

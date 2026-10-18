@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, TrendingUp, X } from 'lucide-react';
+import { Menu, Smartphone, TrendingUp, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { LEGAL } from '../Legal/legalInfo';
+import { SITE } from '../../seo';
 
 const NAV = [
   { to: '/features/', label: 'Features' },
@@ -43,6 +44,17 @@ function AuthButtons({ onClick }: { onClick?: () => void }) {
   );
 }
 
+// Google Play link; the label is hidden at narrower widths to keep the header on one line
+function AppLink({ className = '', label = 'Get the app' }: { className?: string; label?: string }) {
+  return (
+    <a href={SITE.playStoreUrl} target="_blank" rel="noopener noreferrer" aria-label="Get the Android app on Google Play"
+      className={`inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-gray-700 hover:text-blue-700 transition-colors ${className}`}>
+      <Smartphone className="w-4 h-4" aria-hidden="true" />
+      <span className={label ? '' : 'sr-only'}>{label}</span>
+    </a>
+  );
+}
+
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -58,11 +70,18 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           <nav className="hidden md:flex items-center gap-8" aria-label="Main">
             {NAV.map(n => <NavLink key={n.to} to={n.to} className={linkClass(n.to)} end>{n.label}</NavLink>)}
           </nav>
-          <div className="hidden md:flex items-center gap-3"><AuthButtons /></div>
-          <button onClick={() => setOpen(o => !o)} className="md:hidden p-2 -mr-2 text-gray-600"
-            aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="hidden md:flex items-center gap-3">
+            <AppLink className="px-2 py-2 lg:hidden" label="" />
+            <AppLink className="px-3 py-2 hidden lg:inline-flex" />
+            <AuthButtons />
+          </div>
+          <div className="md:hidden flex items-center gap-1">
+            <AppLink className="p-2 border border-gray-300 rounded-lg" label="" />
+            <button onClick={() => setOpen(o => !o)} className="p-2 -mr-2 text-gray-600"
+              aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>
+              {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
         {open && (
           <div className="md:hidden border-t border-gray-200 bg-white px-4 py-4 space-y-4">
@@ -70,6 +89,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               {NAV.map(n => <NavLink key={n.to} to={n.to} onClick={close} className={linkClass(n.to)} end>{n.label}</NavLink>)}
             </nav>
             <div className="grid grid-cols-2 gap-3"><AuthButtons onClick={close} /></div>
+            <AppLink className="w-full py-2 rounded-lg border border-gray-300 hover:border-blue-300" label="Get the Android app" />
           </div>
         )}
       </header>
@@ -90,6 +110,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <li><Link to="/features/" className="hover:text-white">Features</Link></li>
               <li><Link to="/about/" className="hover:text-white">About</Link></li>
               <li><Link to="/#faq" className="hover:text-white">FAQ</Link></li>
+              <li><a href={SITE.playStoreUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white">Android app</a></li>
               <li><Link to="/signup/" className="hover:text-white">Create account</Link></li>
               <li><Link to="/login/" className="hover:text-white">Log in</Link></li>
             </ul>
