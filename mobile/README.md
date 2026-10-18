@@ -69,19 +69,28 @@ and the USD/INR rate (`/api/fx/usd-inr`). Pull down on any screen to refresh.
 
 ### Editing and sync
 
-The app edits **Configuration** (demat account holders, tab visibility) and the
-**FIRE Calculator** inputs. A save sends only the changed key
-(`POST /api/backup` with one `ft_<name>_<username>` entry), applied
-optimistically and rolled back if the server rejects it
-(`useSaveUserData`).
+The app adds, edits and deletes the same data as the website, in the same
+shapes: equity buy/sell (with cash), cash balances, transactions, mutual funds
+(transactions, historical SIPs, future SIP schedules), real estate, interest
+investments and their returns, additional investments, monthly expenses,
+Configuration and FIRE inputs. Excel import/export and the news/video feeds
+stay web-only.
 
-The website syncs per key as well: it uploads only keys edited in that tab,
-loads the server copy when it opens, and pulls in other devices' changes when
-the tab regains focus. Edits on either side therefore don't overwrite each
-other. If both sides edit the *same* key at the same time, the last save wins.
+Record changes go through `useUpdateUserData`: it re-reads `GET /api/backup`,
+applies the change to that fresh copy, and uploads only the keys it touched
+(`POST /api/backup`), so an edit made on the website meanwhile isn't lost. The
+cache is updated optimistically and rolled back on failure. Configuration and
+FIRE use `useSaveUserData`, which writes the whole key from the cached copy.
 
-Holdings, funds, property, loans and expenses are view-only in the app; add or
-edit them on the website.
+The website syncs per key as well: it uploads only keys edited in that tab
+(checked every 5 s), loads the server copy when it opens, and pulls in other
+devices' changes when the tab regains focus. The app refetches when it returns
+to the foreground. If both sides edit the *same* key within a few seconds,
+the last save wins.
+
+Due future-SIP instalments are recorded by whichever app opens first
+(`useAutoSIP` here, the Mutual Funds tab on the web); their ids are
+deterministic, so an instalment is never added twice.
 
 ## Release signing
 

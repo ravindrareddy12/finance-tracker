@@ -26,6 +26,7 @@ export default function MoreScreen() {
     { module: 'additional', title: 'Additional Investments', subtitle: `${cat.addl.count} · ${money(cat.addl.current)}`, icon: 'wallet-outline', href: '/investments' },
     { module: 'fire', title: 'FIRE Calculator', subtitle: 'Your number and the savings path', icon: 'flame-outline', href: '/fire' },
     { module: 'expenses', title: 'Monthly Expenses', subtitle: 'Obligations by month', icon: 'receipt-outline', href: '/expenses' },
+    { module: 'expense-report', title: 'Expense Summary', subtitle: 'Totals by type and month', icon: 'document-text-outline', href: '/expense-report' },
   ];
   const visible = modules.filter(m => isModuleEnabled(userData.config, m.module));
 
@@ -56,7 +57,7 @@ export default function MoreScreen() {
       <Card title="Account" padded={false}>
         <ListRow title={user?.username ?? ''} subtitle="Signed in" leading={leading('person-outline')} />
         <ListRow title="Last synced" value={formatDate(userData.savedAt)} leading={leading('cloud-done-outline')} />
-        <ListRow title="Open website" subtitle="Add or edit data on the web" leading={leading('globe-outline')}
+        <ListRow title="Open website" subtitle="Excel import/export and news feeds" leading={leading('globe-outline')}
           onPress={() => Linking.openURL(WEBSITE_URL)} />
         <ListRow title="Privacy policy" leading={leading('shield-checkmark-outline')}
           onPress={() => Linking.openURL(PRIVACY_POLICY_URL)} />

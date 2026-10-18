@@ -175,6 +175,20 @@ export interface MFNav {
   navDate: string;
 }
 
+export interface MFSearchResult {
+  schemeCode: number | string;
+  schemeName: string;
+  amcName?: string;
+}
+
+export interface NavOnDate {
+  requestedDate: string;
+  /** AMFI date of the NAV used (DD-Mon-YYYY) */
+  navDate: string | null;
+  nav: number | null;
+  exact: boolean;
+}
+
 export interface SessionUser {
   id: string;
   username: string;

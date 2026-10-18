@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { portfolioApi } from '@/api/portfolio';
 import { useAuth } from '@/auth/AuthProvider';
 import type {
-  AdditionalInvestment, AppConfig, BackupResponse, FIREInputs, LoanInvestment, MFHolding, MonthlyExpenses, RealEstateProperty, StockQuote, Transaction,
+  AdditionalInvestment, AppConfig, BackupResponse, FIREInputs, LoanInvestment, MFHolding, MonthlyExpenses, RealEstateProperty, SIPSchedule, StockQuote, Transaction,
 } from '@/types/models';
 import { computeFunds, computeHoldings, summarize } from './calculations';
 
@@ -15,6 +15,50 @@ export const queryKeys = {
   navs:   (codes: string[]) => ['navs', ...codes] as const,
   usdInr: ['fx', 'usd-inr'] as const,
 };
+
+/** Every data key the web app syncs, as `ft_<name>_<username>`. */
+export type DataName =
+  | 'transactions' | 'cash_usd' | 'cash_inr' | 'mf' | 'sip_schedules' | 'realestate'
+  | 'investments' | 'loans' | 'monthly_expenses' | 'fire' | 'app_config';
+
+export interface UserData {
+  transactions: Transaction[];
+  cashUsd: Record<string, number>;
+  cashInr: Record<string, number>;
+  funds: MFHolding[];
+  sipSchedules: SIPSchedule[];
+  properties: RealEstateProperty[];
+  investments: AdditionalInvestment[];
+  loans: LoanInvestment[];
+  expenses: MonthlyExpenses;
+  fire: FIREInputs | null;
+  config: AppConfig;
+  savedAt: string | null;
+}
+
+/** Decode the `ft_<name>_<username>` backup keys into typed data. */
+export function decodeUserData(backup: BackupResponse | undefined, username: string): UserData {
+  const raw = backup?.data ?? {};
+  const get = <T,>(name: DataName, fallback: T): T => (raw[`ft_${name}_${username}`] as T | undefined) ?? fallback;
+  const config = get<Partial<AppConfig>>('app_config', {});
+  return {
+    transactions: get<Transaction[]>('transactions', []),
+    cashUsd:      get<Record<string, number>>('cash_usd', {}),
+    cashInr:      get<Record<string, number>>('cash_inr', {}),
+    funds:        get<MFHolding[]>('mf', []),
+    sipSchedules: get<SIPSchedule[]>('sip_schedules', []),
+    properties:   get<RealEstateProperty[]>('realestate', []),
+    investments:  get<AdditionalInvestment[]>('investments', []),
+    loans:        get<LoanInvestment[]>('loans', []),
+    expenses:     get<MonthlyExpenses>('monthly_expenses', {}),
+    fire:         get<FIREInputs | null>('fire', null),
+    config: {
+      dematAccounts: config.dematAccounts ?? [],
+      enabledTabs:   config.enabledTabs ?? {},
+    },
+    savedAt: backup?.savedAt ?? null,
+  };
+}
 
 /** The user's raw saved data, decoded from the `ft_<name>_<username>` backup keys. */
 export function useUserData() {
@@ -28,32 +72,12 @@ export function useUserData() {
     staleTime: 60_000,
   });
 
-  const data = useMemo(() => {
-    const raw = query.data?.data ?? {};
-    const get = <T,>(name: string, fallback: T): T => (raw[`ft_${name}_${username}`] as T | undefined) ?? fallback;
-    const config = get<Partial<AppConfig>>('app_config', {});
-    return {
-      transactions: get<Transaction[]>('transactions', []),
-      cashUsd:      get<Record<string, number>>('cash_usd', {}),
-      cashInr:      get<Record<string, number>>('cash_inr', {}),
-      funds:        get<MFHolding[]>('mf', []),
-      properties:   get<RealEstateProperty[]>('realestate', []),
-      investments:  get<AdditionalInvestment[]>('investments', []),
-      loans:        get<LoanInvestment[]>('loans', []),
-      expenses:     get<MonthlyExpenses>('monthly_expenses', {}),
-      fire:         get<FIREInputs | null>('fire', null),
-      config: {
-        dematAccounts: config.dematAccounts ?? [],
-        enabledTabs:   config.enabledTabs ?? {},
-      } as AppConfig,
-      savedAt: query.data?.savedAt ?? null,
-    };
-  }, [query.data, username]);
+  const data = useMemo(() => decodeUserData(query.data, username), [query.data, username]);
 
   return { ...query, userData: data };
 }
 
-/** Data names the app can write, mapped to the `ft_<name>_<username>` keys. */
+/** Data names the app writes whole, from the cached copy (settings-style screens). */
 export type WritableKey = 'app_config' | 'fire';
 
 /**
@@ -84,6 +108,50 @@ export function useSaveUserData() {
     },
     onSuccess: res => {
       queryClient.setQueryData<BackupResponse>(cacheKey, old => (old ? { ...old, savedAt: res.savedAt } : old));
+    },
+  });
+}
+
+/** Builds the new values of the keys a change touches, from the latest server data. */
+export type DataChange = (latest: UserData) => Partial<Record<DataName, unknown>>;
+
+/**
+ * Add / edit / delete records. Each change re-reads the server first and is
+ * applied to that copy, so an edit made on the website meanwhile isn't lost;
+ * only the keys the change returns are uploaded.
+ */
+export function useUpdateUserData() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const username = user?.username ?? '';
+  const cacheKey = queryKeys.backup(username);
+
+  const encode = (patch: Partial<Record<DataName, unknown>>) =>
+    Object.fromEntries(Object.entries(patch).map(([name, value]) => [`ft_${name}_${username}`, value]));
+
+  return useMutation({
+    mutationFn: async (change: DataChange) => {
+      const latest = await portfolioApi.backup();
+      const payload = encode(change(decodeUserData(latest, username)));
+      if (Object.keys(payload).length === 0) return latest;
+      const res = await portfolioApi.saveKeys(payload);
+      return { ...latest, savedAt: res.savedAt, data: { ...(latest.data ?? {}), ...payload } } as BackupResponse;
+    },
+    // Show the change straight away; the server copy replaces it once saved
+    onMutate: async change => {
+      await queryClient.cancelQueries({ queryKey: cacheKey });
+      const previous = queryClient.getQueryData<BackupResponse>(cacheKey);
+      if (previous) {
+        const payload = encode(change(decodeUserData(previous, username)));
+        queryClient.setQueryData<BackupResponse>(cacheKey, { ...previous, data: { ...(previous.data ?? {}), ...payload } });
+      }
+      return { previous };
+    },
+    onError: (_err, _change, ctx) => {
+      if (ctx?.previous) queryClient.setQueryData(cacheKey, ctx.previous);
+    },
+    onSuccess: next => {
+      queryClient.setQueryData<BackupResponse>(cacheKey, next);
     },
   });
 }
@@ -134,7 +202,7 @@ export function usePortfolio() {
       cashInr: userData.cashInr,
       usdInr,
     });
-    return { holdings, funds, summary };
+    return { holdings, funds, summary, navs };
   }, [quotesQuery.data, navsQuery.data, userData, usdInr]);
 
   const refresh = useCallback(async () => {
