@@ -9,6 +9,8 @@ export interface Feature {
   title: string;
   summary: string;
   points: string[];
+  /** Icon tile colours */
+  tone: string;
 }
 
 const icon = (Icon: typeof TrendingUp) => <Icon className="w-6 h-6" aria-hidden="true" />;
@@ -16,6 +18,7 @@ const icon = (Icon: typeof TrendingUp) => <Icon className="w-6 h-6" aria-hidden=
 export const FEATURES: Feature[] = [
   {
     id: 'net-worth',
+    tone: 'bg-blue-50 text-blue-600 ring-blue-100',
     icon: icon(LayoutDashboard),
     title: 'Net worth dashboard',
     summary: 'Every asset you own rolled up into one number, with allocation by asset class and account holder.',
@@ -27,6 +30,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'stocks',
+    tone: 'bg-sky-50 text-sky-600 ring-sky-100',
     icon: icon(TrendingUp),
     title: 'US & Indian stocks',
     summary: 'Portfolios for NYSE/NASDAQ and NSE with live quotes, realised and unrealised gains.',
@@ -39,6 +43,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'mutual-funds',
+    tone: 'bg-indigo-50 text-indigo-600 ring-indigo-100',
     icon: icon(BarChart3),
     title: 'Mutual funds & SIPs',
     summary: 'Track lump sums, SIPs and redemptions with XIRR returns that account for every cash flow.',
@@ -51,6 +56,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'real-estate',
+    tone: 'bg-emerald-50 text-emerald-600 ring-emerald-100',
     icon: icon(Building2),
     title: 'Real estate',
     summary: 'Record land, flats and houses — including jointly owned property — with estimated appreciation and sales.',
@@ -63,6 +69,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'interest-investments',
+    tone: 'bg-amber-50 text-amber-600 ring-amber-100',
     icon: icon(HandCoins),
     title: 'Interest investments',
     summary: 'Money you have lent out at interest — how much, to whom, and what has come back.',
@@ -74,6 +81,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'other-investments',
+    tone: 'bg-yellow-50 text-yellow-700 ring-yellow-100',
     icon: icon(Landmark),
     title: 'Other investments',
     summary: 'Fixed deposits, gold, PPF, bonds or anything else you want counted in your net worth.',
@@ -85,6 +93,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'fire',
+    tone: 'bg-orange-50 text-orange-600 ring-orange-100',
     icon: icon(Flame),
     title: 'FIRE calculator',
     summary: 'See how close you are to financial independence based on what you have already saved.',
@@ -96,6 +105,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'expenses',
+    tone: 'bg-rose-50 text-rose-600 ring-rose-100',
     icon: icon(Receipt),
     title: 'Monthly expenses',
     summary: 'Log monthly spending and obligations, then review month-by-month summaries.',
@@ -107,6 +117,7 @@ export const FEATURES: Feature[] = [
   },
   {
     id: 'excel',
+    tone: 'bg-green-50 text-green-700 ring-green-100',
     icon: icon(FileSpreadsheet),
     title: 'Excel import, export & backup',
     summary: 'Bring your existing spreadsheets in, export everything out, and keep full backups.',

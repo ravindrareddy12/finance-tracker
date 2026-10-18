@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { TrendingUp, Lock, User, UserPlus, HelpCircle } from 'lucide-react';
+import AuthShell from './AuthShell';
 import { apiErrorMessage } from '../../services/api';
 
 export default function Signup() {
@@ -32,8 +33,8 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <AuthShell>
+      <div className="bg-white rounded-2xl shadow-xl shadow-slate-900/5 ring-1 ring-slate-200 w-full max-w-md p-6 sm:p-10">
         <div className="flex flex-col items-center mb-8">
           <div className="bg-blue-600 p-3 rounded-full mb-3">
             <TrendingUp className="text-white w-8 h-8" />
@@ -133,6 +134,6 @@ export default function Signup() {
           <Link to="/" className="hover:text-gray-600 hover:underline">← Back to home</Link>
         </p>
       </div>
-    </div>
+    </AuthShell>
   );
 }
