@@ -121,13 +121,16 @@ export default function Signup() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">
+          <Link to="/login/" className="text-blue-600 hover:underline font-medium">
             Sign in
           </Link>
         </p>
         <p className="text-center text-xs text-gray-400 mt-3">
           By creating an account you agree to our{' '}
-          <Link to="/privacy-policy" className="hover:text-gray-600 underline">Privacy Policy</Link>.
+          <Link to="/privacy-policy/" className="hover:text-gray-600 underline">Privacy Policy</Link>.
+        </p>
+        <p className="text-center text-xs text-gray-400 mt-2">
+          <Link to="/" className="hover:text-gray-600 hover:underline">← Back to home</Link>
         </p>
       </div>
     </div>

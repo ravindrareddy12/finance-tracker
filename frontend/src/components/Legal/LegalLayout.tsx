@@ -13,8 +13,8 @@ export default function LegalLayout({ title, children }: { title: string; childr
             <span className="font-bold text-gray-800">{LEGAL.appName}</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link to="/privacy-policy" className="text-gray-600 hover:text-blue-700">Privacy</Link>
-            <Link to="/delete-account" className="text-gray-600 hover:text-blue-700">Delete account</Link>
+            <Link to="/privacy-policy/" className="text-gray-600 hover:text-blue-700">Privacy</Link>
+            <Link to="/delete-account/" className="text-gray-600 hover:text-blue-700">Delete account</Link>
           </nav>
         </div>
       </header>

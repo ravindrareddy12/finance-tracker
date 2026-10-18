@@ -81,7 +81,7 @@ export default function PrivacyPolicy() {
       <Section title="Data retention and deletion">
         <p>
           We keep your account and data for as long as your account exists. You can permanently delete your account at
-          any time — in the app (<em>More → Delete account</em>) or on the <Link to="/delete-account" className="text-blue-700 underline">Delete account</Link> page.
+          any time — in the app (<em>More → Delete account</em>) or on the <Link to="/delete-account/" className="text-blue-700 underline">Delete account</Link> page.
           Deletion immediately removes your account and all of your financial data from our database. Server request
           logs are kept for a limited period for security purposes and then discarded.
         </p>

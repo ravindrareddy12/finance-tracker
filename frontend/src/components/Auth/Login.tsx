@@ -238,10 +238,12 @@ export default function Login() {
 
         <p className="text-center text-sm text-gray-500 mt-4">
           Don't have an account?{' '}
-          <Link to="/signup" className="text-blue-600 hover:underline font-medium">Sign up</Link>
+          <Link to="/signup/" className="text-blue-600 hover:underline font-medium">Sign up</Link>
         </p>
         <p className="text-center text-xs text-gray-400 mt-3">
-          <Link to="/privacy-policy" className="hover:text-gray-600 hover:underline">Privacy Policy</Link>
+          <Link to="/" className="hover:text-gray-600 hover:underline">← Back to home</Link>
+          {' · '}
+          <Link to="/privacy-policy/" className="hover:text-gray-600 hover:underline">Privacy Policy</Link>
         </p>
       </div>
     </div>

@@ -9,7 +9,8 @@ const TOKEN_KEY = 'ft_token';
 export const AUTH_EXPIRED_EVENT = 'ft:auth-expired';
 
 export const tokenStore = {
-  get:   (): string | null => localStorage.getItem(TOKEN_KEY),
+  // No localStorage while prerendering on the server
+  get:   (): string | null => (typeof localStorage === 'undefined' ? null : localStorage.getItem(TOKEN_KEY)),
   set:   (token: string)    => localStorage.setItem(TOKEN_KEY, token),
   clear: ()                 => localStorage.removeItem(TOKEN_KEY),
 };

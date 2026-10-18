@@ -110,7 +110,7 @@ export default function DeleteAccount() {
               </button>
 
               <p className="text-xs text-gray-500">
-                Forgot your password? Reset it from the <Link to="/login" className="text-blue-700 underline">sign-in page</Link>, or email{' '}
+                Forgot your password? Reset it from the <Link to="/login/" className="text-blue-700 underline">sign-in page</Link>, or email{' '}
                 <a href={`mailto:${LEGAL.contactEmail}?subject=Account%20deletion%20request`} className="text-blue-700 underline">{LEGAL.contactEmail}</a>{' '}
                 from the address you want to be contacted at, with your username, and we will verify and delete the account.
               </p>
