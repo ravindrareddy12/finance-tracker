@@ -18,3 +18,4 @@ export function render(url: string): string {
 }
 
 export { PAGES, SITE, FAQ, canonicalFor } from './seo';
+export { FEATURES } from './components/Marketing/featureList';

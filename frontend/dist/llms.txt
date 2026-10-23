@@ -1,0 +1,77 @@
+# Finance Tracker
+
+> Track US and Indian stocks, mutual funds, SIPs, real estate, loans and expenses in one private dashboard. See your net worth, XIRR returns and FIRE progress.
+
+Finance Tracker is a free personal finance web app (https://finance.mypgmanager.com/) and Android app for investors in India and the US. Users enter or import their own transactions; it never connects to bank or broker accounts.
+
+## Features
+
+- **Net worth dashboard**: Every asset you own rolled up into one number, with allocation by asset class and account holder. Consolidated view across stocks, funds, property, loans, cash and other investments; Asset allocation breakdown and charts; Track holdings for each family member or demat account separately.
+- **US & Indian stocks**: Portfolios for NYSE/NASDAQ and NSE with live quotes, realised and unrealised gains. Buy and sell transactions with fees and dates; Live market prices and day change; USD holdings converted at the current USD/INR rate; Cash balance per account and a market news feed.
+- **Mutual funds & SIPs**: Track lump sums, SIPs and redemptions with XIRR returns that account for every cash flow. Holdings and transaction history per fund; Active and future SIP schedules; XIRR, absolute return and current value per fund; Bulk import from Excel.
+- **Real estate**: Record land, flats and houses — including jointly owned property — with estimated appreciation and sales. Purchase price, date and your ownership share; Track partners in jointly owned property; Estimated current value from yearly appreciation; Record sales and see the realised gain.
+- **Interest investments**: Money you have lent out at interest — how much, to whom, and what has come back. Borrower, amount and date given for each loan; Log every return received; Outstanding amount at a glance.
+- **Other investments**: Fixed deposits, gold, PPF, bonds or anything else you want counted in your net worth. Amount, date, currency and interest rate; Notes for maturity dates or scheme details; Included in the consolidated dashboard.
+- **FIRE calculator**: See how close you are to financial independence based on what you have already saved. Target corpus from your expenses and withdrawal rate; Progress based on your real portfolio value; Adjust inflation and return assumptions.
+- **Monthly expenses**: Log monthly spending and obligations, then review month-by-month summaries. Monthly expenses and recurring obligations; Monthly expense summary report; Import past months from Excel.
+- **Excel import, export & backup**: Bring your existing spreadsheets in, export everything out, and keep full backups. Import stocks, mutual funds, property and expenses from Excel; Export your whole portfolio to a formatted workbook; One-click JSON backup and restore.
+
+## FAQ
+
+### What can I track with Finance Tracker?
+
+US stocks (NYSE/NASDAQ), Indian stocks (NSE), mutual funds and SIPs, interest-bearing loans you have given, real estate, other investments such as FDs or gold, cash balances and your monthly expenses — all rolled up into one net worth view.
+
+### Do I need to connect my bank or broker account?
+
+No. You add transactions yourself or import them from Excel. Finance Tracker never asks for bank, broker or demat credentials.
+
+### Is Finance Tracker free?
+
+Yes. Creating an account and tracking your stocks, mutual funds, property, loans and expenses is free on the web and on the Android app. There are no ads.
+
+### How are my returns calculated?
+
+Mutual fund and portfolio returns use XIRR, which accounts for the timing of every purchase, SIP instalment and redemption — the same method fund houses use for annualised returns.
+
+### What is XIRR and why is it better than absolute return for SIPs?
+
+XIRR is the annualised return of a series of cash flows made on different dates. Absolute return ignores time, so a SIP started last month and one started five years ago look alike. XIRR weighs each instalment by how long it was invested, so returns are comparable across funds and holding periods.
+
+### How are SIP instalments recorded?
+
+Set up a SIP once with its amount and date. Each instalment is recorded automatically at that day’s NAV, using official NAV data published by AMFI, so units and XIRR stay up to date without manual entry.
+
+### Can I track investments for my family members?
+
+Yes. Holdings can be kept in separate portfolios per family member or demat account, and the dashboard shows both each portfolio and the combined household net worth.
+
+### Can I track US and Indian investments together?
+
+Yes. US holdings are valued in USD and converted at the current USD/INR rate so your combined net worth is shown in one currency.
+
+### Is my data private?
+
+Your data is tied to your account and is not sold, shared or used for advertising. Passwords are stored only as bcrypt hashes and the site has no ad or analytics trackers.
+
+### Is there a mobile app?
+
+Yes. Finance Tracker is available on Google Play for Android. Sign in with the same account and your data stays in sync with the website.
+
+### Can I export my data?
+
+Yes. You can export your portfolio to Excel at any time and take a full JSON backup that can be restored later.
+
+## Pages
+
+- [Finance Tracker – Net Worth, Stock, Mutual Fund & Expense Tracker](https://finance.mypgmanager.com/): Track US and Indian stocks, mutual funds, SIPs, real estate, loans and expenses in one private dashboard. See your net worth, XIRR returns and FIRE progress.
+- [Features – Stocks, SIPs, Property & Expenses | Finance Tracker](https://finance.mypgmanager.com/features/): Live NYSE, NASDAQ and NSE prices, mutual fund SIPs with XIRR, real estate, loans, a FIRE calculator, monthly expense reports and Excel import/export.
+- [About Finance Tracker – A Private Personal Finance Dashboard](https://finance.mypgmanager.com/about/): Why Finance Tracker exists, who it is for and how your data is kept private: no bank linking, no ads, no analytics trackers.
+- [Create a Free Account | Finance Tracker](https://finance.mypgmanager.com/signup/): Create a Finance Tracker account and start tracking your stocks, mutual funds, property and expenses in one place.
+- [Sign In | Finance Tracker](https://finance.mypgmanager.com/login/): Sign in to Finance Tracker to see your portfolio, net worth and expenses.
+- [Privacy Policy | Finance Tracker](https://finance.mypgmanager.com/privacy-policy/): How Finance Tracker collects, uses, stores and deletes your information.
+- [Android app on Google Play](https://play.google.com/store/apps/details?id=com.mypgmanager.finance)
+
+## Contact
+
+support@mypgmanager.com

@@ -1,5 +1,6 @@
 // Post-build step: renders each public route to static HTML with its own
-// <title>, description, canonical and social tags, then writes sitemap.xml.
+// <title>, description, canonical and social tags, then writes sitemap.xml
+// and llms.txt.
 // nginx serves dist/<route>/index.html via `try_files $uri $uri/ /index.html`.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,7 +10,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const ssrDir = path.join(root, 'dist-ssr');
 
-const { render, PAGES, SITE, FAQ, canonicalFor } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.mjs')).href);
+const { render, PAGES, SITE, FAQ, FEATURES, canonicalFor } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.mjs')).href);
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -60,5 +61,33 @@ ${SITEMAP_ROUTES.map(r => `  <url><loc>${canonicalFor(r)}</loc><lastmod>${today}
 `;
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), sitemap);
 console.log(`  wrote sitemap.xml (${SITE.url})`);
+
+// llms.txt (https://llmstxt.org): a plain-text summary for AI assistants and
+// answer engines, built from the same feature list and FAQ as the pages
+const llms = `# ${SITE.name}
+
+> ${PAGES['/'].description}
+
+${SITE.name} is a free personal finance web app (${SITE.url}/) and Android app for investors in India and the US. Users enter or import their own transactions; it never connects to bank or broker accounts.
+
+## Features
+
+${FEATURES.map(f => `- **${f.title}**: ${f.summary} ${f.points.join('; ')}.`).join('\n')}
+
+## FAQ
+
+${FAQ.map(f => `### ${f.q}\n\n${f.a}`).join('\n\n')}
+
+## Pages
+
+${SITEMAP_ROUTES.map(r => `- [${PAGES[r].title}](${canonicalFor(r)}): ${PAGES[r].description}`).join('\n')}
+- [Android app on Google Play](${SITE.playStoreUrl})
+
+## Contact
+
+support@mypgmanager.com
+`;
+fs.writeFileSync(path.join(dist, 'llms.txt'), llms);
+console.log('  wrote llms.txt');
 
 fs.rmSync(ssrDir, { recursive: true, force: true });

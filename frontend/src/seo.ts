@@ -4,7 +4,7 @@
 export const SITE = {
   name: 'Finance Tracker',
   url: 'https://finance.mypgmanager.com',
-  ogImage: 'https://finance.mypgmanager.com/og-image.png',
+  ogImage: 'https://finance.mypgmanager.com/og-image.jpg',
   playStoreUrl: 'https://play.google.com/store/apps/details?id=com.mypgmanager.finance',
 };
 
@@ -19,12 +19,12 @@ export const PAGES: Record<string, PageMeta> = {
   '/': {
     title: 'Finance Tracker – Net Worth, Stock, Mutual Fund & Expense Tracker',
     description:
-      'Track US and Indian stocks, mutual funds and SIPs, real estate, loans and monthly expenses in one private dashboard. See your net worth, XIRR returns and FIRE progress.',
+      'Track US and Indian stocks, mutual funds, SIPs, real estate, loans and expenses in one private dashboard. See your net worth, XIRR returns and FIRE progress.',
   },
   '/features': {
-    title: 'Features – Portfolio, SIP, Real Estate & Expense Tracking | Finance Tracker',
+    title: 'Features – Stocks, SIPs, Property & Expenses | Finance Tracker',
     description:
-      'Live quotes for NYSE, NASDAQ and NSE stocks, mutual fund SIP tracking with XIRR, real estate and interest investments, a FIRE calculator, monthly expense reports and Excel import/export.',
+      'Live NYSE, NASDAQ and NSE prices, mutual fund SIPs with XIRR, real estate, loans, a FIRE calculator, monthly expense reports and Excel import/export.',
   },
   '/about': {
     title: 'About Finance Tracker – A Private Personal Finance Dashboard',
@@ -77,8 +77,24 @@ export const FAQ: FaqItem[] = [
     a: 'No. You add transactions yourself or import them from Excel. Finance Tracker never asks for bank, broker or demat credentials.',
   },
   {
+    q: 'Is Finance Tracker free?',
+    a: 'Yes. Creating an account and tracking your stocks, mutual funds, property, loans and expenses is free on the web and on the Android app. There are no ads.',
+  },
+  {
     q: 'How are my returns calculated?',
     a: 'Mutual fund and portfolio returns use XIRR, which accounts for the timing of every purchase, SIP instalment and redemption — the same method fund houses use for annualised returns.',
+  },
+  {
+    q: 'What is XIRR and why is it better than absolute return for SIPs?',
+    a: 'XIRR is the annualised return of a series of cash flows made on different dates. Absolute return ignores time, so a SIP started last month and one started five years ago look alike. XIRR weighs each instalment by how long it was invested, so returns are comparable across funds and holding periods.',
+  },
+  {
+    q: 'How are SIP instalments recorded?',
+    a: 'Set up a SIP once with its amount and date. Each instalment is recorded automatically at that day’s NAV, using official NAV data published by AMFI, so units and XIRR stay up to date without manual entry.',
+  },
+  {
+    q: 'Can I track investments for my family members?',
+    a: 'Yes. Holdings can be kept in separate portfolios per family member or demat account, and the dashboard shows both each portfolio and the combined household net worth.',
   },
   {
     q: 'Can I track US and Indian investments together?',
